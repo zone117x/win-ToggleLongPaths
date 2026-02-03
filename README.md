@@ -1,6 +1,12 @@
-# Usage
-* Open PowerShell / Windows Terminal
-* Run:
+# win-ToggleLongPaths
+
+Interactive tool to enable or disable Windows long path support (260 character limit) via the registry.
+
+## Usage
+
+**Option 1:** Open PowerShell / Windows Terminal and run:
+```powershell
+irm https://raw.githubusercontent.com/zone117x/win-ToggleLongPaths/main/ToggleLongPaths.ps1 | iex
 ```
-irm https://gist.githubusercontent.com/zone117x/cb911b4e5af91fd80186573c14d36a2c/raw/ae1c0f32114f12848e681affdfb60cc9d5cfc4c0/ToggleLongPaths.ps1 | iex
-```
+
+**Option 2:** Download and run the [ToggleLongPaths.bat](https://raw.githubusercontent.com/zone117x/win-ToggleLongPaths/main/ToggleLongPaths.bat) file (right-click the link, Save As, then double-click to run).

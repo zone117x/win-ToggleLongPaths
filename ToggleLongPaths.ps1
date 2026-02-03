@@ -1,7 +1,13 @@
 # --- Self-Elevation Block ---
 if (!([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
     Write-Host "Requesting Administrative privileges..." -ForegroundColor Yellow
-    Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
+    if ($PSCommandPath) {
+        Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$PSCommandPath`"" -Verb RunAs
+    } else {
+        $tmpScript = Join-Path $env:TEMP "ToggleLongPaths.ps1"
+        $MyInvocation.MyCommand.ScriptBlock | Set-Content -Path $tmpScript -Encoding UTF8
+        Start-Process powershell.exe "-NoProfile -ExecutionPolicy Bypass -File `"$tmpScript`"" -Verb RunAs
+    }
     exit
 }
 # ----------------------------
@@ -30,7 +36,7 @@ do {
 
     Clear-Host
     Write-Host "===============================================" -ForegroundColor Cyan
-    Write-Host "   WINDOWS 11 LONG PATHS CONFIGURATION TOOL    " -ForegroundColor Cyan
+    Write-Host "      WINDOWS LONG PATHS CONFIGURATION TOOL" -ForegroundColor Cyan
     Write-Host "===============================================" -ForegroundColor Cyan
     Write-Host -NoNewline "Current Status: "
     Write-Host $statusText -ForegroundColor $statusColor
@@ -49,10 +55,12 @@ do {
         "3" { 
             Write-Host "Restarting Explorer..." -ForegroundColor Yellow
             Get-Process explorer | Stop-Process -Force
+            Start-Sleep -Seconds 1
+            Start-Process explorer.exe
             Write-Host "Done!" -ForegroundColor Green
-            Pause 
+            Pause
         }
-        "4" { exit }
+        "4" { break }
         default { Write-Host "Invalid selection, try again." -ForegroundColor Yellow; Start-Sleep -Seconds 1 }
     }
 } while ($choice -ne "4")
